@@ -70,13 +70,6 @@ module "RouteTable" {
             target_resource         = merge(local.rtrs_target_resouce_id,
                 { gateway_id = local.igw_list["${lower(format("igw-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"] }
             )
-        },
-        {
-            route_table_identifier  = lower(format("rt-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
-            destination_cidr_block  = "0.0.0.0/0"
-            target_resource         = merge(local.rtrs_target_resouce_id,
-                { nat_gateway_id = local.ngw_list["${lower(format("ngw-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))}"] }
-            )
         }
     ]
 }

@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"create-security_group","Source":"../00-Module/SecurityGroup","Dir":"../00-Module/SecurityGroup"},{"Key":"","Source":"","Dir":"."}]}
+{"Modules":[{"Key":"create-security_group","Source":"../00-Module/SecurityGroup","Dir":"../00-Module/SecurityGroup"},{"Key":"","Source":"","Dir":"."},{"Key":"SecurityGroup","Source":"../00-Module/SecurityGroup","Dir":"../00-Module/SecurityGroup"},{"Key":"SecurityGroupRule","Source":"../00-Module/SecurityGroupRule","Dir":"../00-Module/SecurityGroupRule"}]}

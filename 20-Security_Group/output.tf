@@ -1,5 +1,5 @@
-output "security_group_id" {
-    value = { for k,sg in module.create-security_group.security_group : k => sg.id }
+output "scg_ids" {
+    value = { for k,scg in module.SecurityGroup.SecurityGroup : k => scg.id }
 }
 
 # output "security_group_rule_cidr_blocks" {

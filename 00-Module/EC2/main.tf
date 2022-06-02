@@ -29,9 +29,7 @@ resource "aws_instance" "this" {
             version = lookup(launch_template.value, "version", null)
         }
     }
-    tags = {
-        "Name" = "ec2-${var.name_tag_middle}-${each.value.identifier}"
-    }
+    tags = each.value.tags
 }
 
 resource "aws_eip" "eip" {
@@ -39,7 +37,5 @@ resource "aws_eip" "eip" {
     vpc                         = true
     instance                    = aws_instance.this["${each.value.ec2_identifier}"].id
     associate_with_private_ip   = aws_instance.this["${each.value.ec2_identifier}"].private_ip
-    tags                        = {
-        "Name" = "eip-${var.name_tag_middle}-${each.value.ec2_identifier}"
-    }
+    tags                        = each.value.tags
 }

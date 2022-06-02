@@ -1,11 +1,8 @@
-output "security_group" {
+output "SecurityGroup" {
     value = aws_security_group.this
 }
 
-# output "security_group_rule_cidr_blocks" {
-#     value = aws_security_group_rule.security_group_rule_cidr_blocks
-# }
 
-# output "security_group_rule_source_security_group_id" {
-#     value = aws_security_group_rule.security_group_rule_source_security_group_id
-# }
+output "scg_ids" {
+    value = { for k,scg in aws_security_group.this : k => scg.id }
+}

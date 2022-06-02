@@ -90,19 +90,23 @@ module "VPC_Subnet" {
                     "Name" = lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
                 }
             )
-            attach_ngw              = true
-            ngw_identifier          = lower(format("ngw-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
-            eip_identifier          = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
-            ngw_tags                = merge( local.tags["ngw"],
-                {
-                    "Name" = lower(format("ngw-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
-                }
-            )
-            eip_tags                = merge( local.tags["eip"],
-                {
-                    "Name" = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
-                }
-            )           
+            # attach_ngw              = true
+            # ngw_identifier          = lower(format("ngw-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
+            # eip_identifier          = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
+            # ngw_tags                = merge( local.tags["ngw"],
+            #     {
+            #         "Name" = lower(format("ngw-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
+            #     }
+            # )
+            # eip_tags                = merge( local.tags["eip"],
+            #     {
+            #         "Name" = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
+            #     }
+            attach_ngw              = null
+            ngw_identifier          = null
+            eip_identifier          = null
+            ngw_tags                = null
+            eip_tags                = null         
         },
         {
             subnet_identifier       = lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01c"))

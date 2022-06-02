@@ -14,9 +14,13 @@ locals {
             "Name"  = ""
             "ENV"   = "${local.Environment}"
         }
+        "eip"   = {
+            "Name"  = ""
+            "ENV"   = "${local.Environment}"
+        }
     }
-    sub_id_list     = data.terraform_remote_state.Network.outputs.sub_id
-    scg_id_list     = data.terraform_remote_state.Security_Group.outputs.security_group_id
+    sub_ids         = data.terraform_remote_state.VPC_Subnet.outputs.subnet_id
+    scg_ids         = data.terraform_remote_state.SecurityGroup.outputs.scg_ids
     # kms key arn으로 작성 필요
     ec2_default_user_data   = <<EOF
 #cloud-config
@@ -73,16 +77,16 @@ EOF
 }
 
 module "create-ec2_instance" {
-    source = "../00_Module/ec2"
+    source = "../00-Module/EC2"
     ec2 = [
         {
             identifier              = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
             ami                     = "ami-02de72c5dc79358c9"
             instance_type           = "t2.micro"
             availability_zone       = "ap-northeast-2a"
-            subnet_id               =  data.terraform_remote_state.Network.outputs.sub_id["pub-lb-a"]
-            vpc_security_group_ids  = ["${data.terraform_remote_state.Security_Group.outputs.security_group_id["bestion"]}"]
-            user_data               = "${local.ec2_default_user_data}"
+            subnet_id               = local.sub_ids["${lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))}"]
+            vpc_security_group_ids  = [local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]]
+            user_data               = local.ec2_default_user_data
             tags                    = merge(local.tags["bestion"],
                 {
                     "Name" = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
@@ -109,9 +113,13 @@ module "create-ec2_instance" {
     ]
     eips        = [
         {
-            identifier      = "bestion"
-            ec2_identifier  = "bestion"
+            identifier      = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "bestion")) 
+            ec2_identifier  = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion")) 
+            tags = merge(local.tags["eip"],
+                {
+                    "Name" = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))   
+                }
+            )
         }
     ]
-	name_tag_middle = local.name_tag_middle
 }
