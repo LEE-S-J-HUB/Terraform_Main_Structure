@@ -32,7 +32,7 @@ data "terraform_remote_state" "SecurityGroup" {
     config = {
         bucket = "s3-an2-lsj-dev-terraform"
         region = "ap-northeast-2"
-        key ="tra01/10-SecurityGroup.tfstate"
+        key ="tra01/20-SecurityGroup.tfstate"
         encrypt = true
     }
 }

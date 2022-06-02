@@ -1,6 +1,22 @@
 locals {
-    name_tag_middle         = "an2-tc01-dev"
-    kms_ebs_dev             = "arn:aws:kms:ap-northeast-2:304149346685:key/50b78494-f91d-4dff-af74-a9d01eefc5b2"
+    project_code            = "tra01"
+    Environment             = "DEV"
+    tags                    = {
+        "bestion"   = {
+            "Name"  = ""
+            "ENV"   = "${local.Environment}"
+        }
+        "web"   = {
+            "Name"  = ""
+            "ENV"   = "${local.Environment}"
+        }
+        "ebs"   = {
+            "Name"  = ""
+            "ENV"   = "${local.Environment}"
+        }
+    }
+    sub_id_list     = data.terraform_remote_state.Network.outputs.sub_id
+    scg_id_list     = data.terraform_remote_state.Security_Group.outputs.security_group_id
     # kms key arn으로 작성 필요
     ec2_default_user_data   = <<EOF
 #cloud-config
@@ -60,23 +76,30 @@ module "create-ec2_instance" {
     source = "../00_Module/ec2"
     ec2 = [
         {
-            identifier              = "bestion"
+            identifier              = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
             ami                     = "ami-02de72c5dc79358c9"
             instance_type           = "t2.micro"
             availability_zone       = "ap-northeast-2a"
             subnet_id               =  data.terraform_remote_state.Network.outputs.sub_id["pub-lb-a"]
             vpc_security_group_ids  = ["${data.terraform_remote_state.Security_Group.outputs.security_group_id["bestion"]}"]
             user_data               = "${local.ec2_default_user_data}"
+            tags                    = merge(local.tags["bestion"],
+                {
+                    "Name" = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
+                }
+            )
             root_block_device = [
                 {
                     volume_type             = "gp2"
                     volume_size             = 50
                     delete_on_termination   = true
                     encrypted               = true
-                    kms_key_id              = "${local.kms_ebs_dev}"
-                    tags = {
-                        Name = "ebs-${local.name_tag_middle}-bestion"
-                    }
+                    kms_key_id              = ""
+                    tags = merge(local.tags["ebs"],
+                        {
+                            "Name" = lower(format("ebs-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))   
+                        }
+                    )
                 }
             ]
             launch_template = {
