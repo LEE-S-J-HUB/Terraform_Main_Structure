@@ -16,11 +16,9 @@ resource "aws_security_group_rule" "this" {
     from_port                   = split("_", each.value.rule)[2]
     to_port                     = split("_", each.value.rule)[3]
     protocol                    = split("_", each.value.rule)[4]
-    cidr_blocks                 = lookup(each.value.rule_target, "cidr_blocks", [null])
-    ipv6_cidr_blocks            = lookup(each.value.rule_target, "ipv6_cidr_blocks", [null])
-    prefix_list_ids             = lookup(each.value.rule_target, "prefix_list_ids", [null])
+    cidr_blocks                 = lookup(each.value.rule_target, "cidr_blocks", null)
+    ipv6_cidr_blocks            = lookup(each.value.rule_target, "ipv6_cidr_blocks", null)
+    prefix_list_ids             = lookup(each.value.rule_target, "prefix_list_ids", null)
     source_security_group_id    = lookup(each.value.rule_target, "source_security_group_id", null)
     description                 = lookup(each.value, "description", null)
 }
-
-

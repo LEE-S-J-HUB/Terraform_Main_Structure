@@ -2,7 +2,14 @@ variable "sgrs" {
     type = list(object({
         security_group_identifier   = string
         rule                        = string
-        rule_target                 = map(list(string))
+        rule_target                 = object(
+            {
+                cidr_blocks                     = list(string)
+                ipv6_cidr_blocks                = list(string)
+                prefix_list_ids                 = list(string)
+                source_security_group_id        = string
+            }
+        )
         description                 = string
     }))
 }

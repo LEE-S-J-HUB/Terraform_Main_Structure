@@ -86,7 +86,7 @@ module "SecurityGroupRule" {
         {
             security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
             rule                        = "web_ingress_10022_10022_-1_bestion"
-            rule_target                 = merge(local.sgrs_target, { source_security_group_id = ["${local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]}"] })
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]} )
             description                 = "outbound ANY"
         }
     ]

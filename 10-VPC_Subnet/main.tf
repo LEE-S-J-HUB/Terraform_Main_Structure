@@ -102,6 +102,7 @@ module "VPC_Subnet" {
             #     {
             #         "Name" = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))
             #     }
+            #  )
             attach_ngw              = null
             ngw_identifier          = null
             eip_identifier          = null
