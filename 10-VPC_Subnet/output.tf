@@ -1,19 +1,19 @@
-output "vpc_id" {
+output "vpc_ids" {
     value = { for k,vpc in module.VPC_Subnet.vpc : k => vpc.id }
 }
 
-output "igw_id" {
-    value = { for k,igw in module.VPC_Subnet.internet_gateway : k =>igw.id }
+output "igw_ids" {
+    value = { for k,igw in module.VPC_Subnet.igw : k =>igw.id }
 }
 
-output "subnet_id" {
-    value = { for k,sub in module.VPC_Subnet.subnet : k => sub.id }
+output "sub_ids" {
+    value = { for k,sub in module.VPC_Subnet.sub : k => sub.id }
 }
 
-output "ngw_id" {
-    value = { for k,ngw in module.VPC_Subnet.nat_gateway : k => ngw.id }
+output "ngw_ids" {
+    value = { for k,ngw in module.VPC_Subnet.ngw : k => ngw.id }
 }
 
-output "nat_eip_id" {
-    value = { for k,eip in module.VPC_Subnet.nat_eip : k => eip.id }
+output "ngw_eip_ids" {
+    value = { for k,eip in module.VPC_Subnet.ngw_eip : k => eip.id }
 }

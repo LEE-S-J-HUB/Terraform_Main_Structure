@@ -2,18 +2,18 @@ output "vpc" {
     value = aws_vpc.this
 }
 
-output "internet_gateway" {
+output "igw" {
     value = aws_internet_gateway.this
 }
 
-output "subnet" {
+output "sub" {
     value = aws_subnet.this
 }
 
-output "nat_gateway" {
+output "ngw" {
     value = aws_nat_gateway.this
 }
 
-output "nat_eip" {
+output "ngw_eip" {
     value = aws_eip.this 
 }
