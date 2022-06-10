@@ -32,7 +32,7 @@ resource "aws_instance" "this" {
     tags = each.value.tags
 }
 
-resource "aws_eip" "eip" {
+resource "aws_eip" "this" {
     for_each                    = { for eip in var.eips : eip.identifier => eip }
     vpc                         = true
     instance                    = aws_instance.this["${each.value.ec2_identifier}"].id

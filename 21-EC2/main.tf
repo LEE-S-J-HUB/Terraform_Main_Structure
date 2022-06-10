@@ -19,7 +19,7 @@ locals {
             "ENV"   = "${local.Environment}"
         }
     }
-    sub_ids         = data.terraform_remote_state.VPC_Subnet.outputs.subnet_id
+    sub_ids         = data.terraform_remote_state.VPC_Subnet.outputs.sub_ids
     scg_ids         = data.terraform_remote_state.SecurityGroup.outputs.scg_ids
     # kms key arn으로 작성 필요
     ec2_default_user_data   = <<EOF
@@ -102,6 +102,37 @@ module "create-ec2_instance" {
                     tags = merge(local.tags["ebs"],
                         {
                             "Name" = lower(format("ebs-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))   
+                        }
+                    )
+                }
+            ]
+            launch_template = {
+                Existence = "no"
+            }
+        },
+        {
+            identifier              = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+            ami                     = "ami-02de72c5dc79358c9"
+            instance_type           = "t2.micro"
+            availability_zone       = "ap-northeast-2a"
+            subnet_id               = local.sub_ids["${lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "web-01a"))}"]
+            vpc_security_group_ids  = [local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]]
+            user_data               = local.ec2_default_user_data
+            tags                    = merge(local.tags["web"],
+                {
+                    "Name" = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+                }
+            )
+            root_block_device = [
+                {
+                    volume_type             = "gp2"
+                    volume_size             = 50
+                    delete_on_termination   = true
+                    encrypted               = true
+                    kms_key_id              = ""
+                    tags = merge(local.tags["ebs"],
+                        {
+                            "Name" = lower(format("ebs-an2-%s-%s-%s", local.project_code, local.Environment, "web"))   
                         }
                     )
                 }

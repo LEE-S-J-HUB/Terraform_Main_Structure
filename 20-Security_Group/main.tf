@@ -13,7 +13,7 @@ locals {
         prefix_list_ids                 = null
         source_security_group_id        = null
     }
-    vpc_id       = data.terraform_remote_state.VPC_Subnet.outputs.vpc_id
+    vpc_id       = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
 }
 
 module "SecurityGroup" {
@@ -72,6 +72,18 @@ module "SecurityGroupRule" {
             description                 = "SSH"
         },
         {
+            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]
+            rule                        = "bestion_ingress_3128_3128_tcp_wproxy"
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"] })
+            description                 = "SSH"
+        },
+        {
+            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]
+            rule                        = "xalb_ingress_80_80_tcp_0.0.0.0/0"
+            rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
+            description                 = "Web Service"
+        },
+        {
             security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]
             rule                        = "xalb_egress_0_0_-1_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
@@ -85,9 +97,15 @@ module "SecurityGroupRule" {
         },
         {
             security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
-            rule                        = "web_ingress_10022_10022_-1_bestion"
-            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]} )
-            description                 = "outbound ANY"
+            rule                        = "web_ingress_10022_10022_tcp_bestion"
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]} )
+            description                 = "from Bestion SSH"
+        },
+        {
+            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
+            rule                        = "web_ingress_80_80_tcp_bestion"
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]} )
+            description                 = "from xalb Web Service"
         }
     ]
 }
