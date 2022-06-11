@@ -32,8 +32,8 @@ locals {
 
 module "VPC_Subnet" {
     source  = "../00-Module/VPC_Subnet/"
-    # Resource creation method: for_each
-    # vpc_Key : vpc_identifier ( vpc_tags["Name"])
+    # Resource creation method : for_each
+    # vpc Key : vpc_identifier ( vpc_tags["Name"])
     vpcs    = [
         {
             vpc_identifier          = format("${local.tags["vpc"].Name}-%s", "pub")
@@ -53,8 +53,8 @@ module "VPC_Subnet" {
         }
     ]
 
-    # Resource creation method: for_each
-    # subnet_Key : subnet_identifier ( subnet_tags["Name"])
+    # Resource creation method : for_each
+    # sub Key : subnet_identifier ( subnet_tags["Name"])
     subs = [
         {
             sub_identifier          = format("${local.tags["sub"].Name}-%s", "lb-01a")
@@ -86,8 +86,8 @@ module "VPC_Subnet" {
         }
     ]
 
-    # Resource creation method: for_each
-    # igw_Key : igw_identifier ( igw_tags["Name"])
+    # Resource creation method : for_each
+    # igw Key : igw_identifier ( igw_tags["Name"])
     igws    = [
         {
             vpc_identifier          = format("${local.tags["vpc"].Name}-%s", "pub")
@@ -96,9 +96,9 @@ module "VPC_Subnet" {
         }
     ]
 
-    # Resource creation method: for_each
-    # ngw_Key : ngw_identifier ( ngw_tags["Name"])
-    # eip_Key : eip_identifier ( eip_tags["Name"])
+    # Resource creation method : for_each
+    # ngw Key : ngw_identifier ( ngw_tags["Name"])
+    # eip Key : eip_identifier ( eip_tags["Name"])
     ngws    = [
         {
             # sub_identifier          = format("${local.tags["sub"].Name}-%s", "lb-01a")

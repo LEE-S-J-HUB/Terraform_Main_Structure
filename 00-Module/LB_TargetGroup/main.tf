@@ -11,5 +11,5 @@ resource "aws_lb_target_group_attachment" "this" {
     for_each    = { for k in var.tgas : "${k.target_group_identifier}_${k.target_id}_${k.port}" => k}
     target_group_arn    = lookup(aws_lb_target_group.this[each.value.target_group_identifier], "arn", null ) 
     target_id           = lookup(each.value, "target_id", null)
-    port                = lookup(each.value, "vpc_id", null)
+    port                = lookup(each.value, "port", null)
 }

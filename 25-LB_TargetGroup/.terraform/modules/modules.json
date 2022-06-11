@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"create-ec2_instance","Source":"../00-Module/EC2","Dir":"../00-Module/EC2"},{"Key":"lb_TargetGroup","Source":"../00-Module/lb_TargetGroup","Dir":"../00-Module/LB_TargetGroup"}]}
+{"Modules":[{"Key":"create-ec2_instance","Source":"../00-Module/EC2","Dir":"../00-Module/EC2"},{"Key":"lb_TargetGroup","Source":"../00-Module/lb_TargetGroup","Dir":"../00-Module/LB_TargetGroup"},{"Key":"","Source":"","Dir":"."}]}
