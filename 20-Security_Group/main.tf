@@ -3,7 +3,7 @@ locals {
     Environment  = "DEV"
     tags         = {
         "sgs"     = {
-            "Name"  = ""
+            "Name"  = lower(format("scg-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
     }
@@ -20,29 +20,29 @@ module "SecurityGroup" {
     source          = "../00-Module/SecurityGroup"
     sgs             = [
         {
-            identifier       = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
+            identifier       = format("${local.tags["sgs"].Name}-%s", "bestion")
             vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
             tags                = merge( local.tags["sgs"],
                 {
-                    "Name" = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
+                    "Name" = format("${local.tags["sgs"].Name}-%s", "bestion")
                 }
             )
         },
         {
-            identifier       = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+            identifier       = format("${local.tags["sgs"].Name}-%s", "web")
             vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
             tags                = merge( local.tags["sgs"],
                 {
-                    "Name" = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+                    "Name" = format("${local.tags["sgs"].Name}-%s", "web")
                 }
             )
         },
         {
-            identifier       = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))
+            identifier       = format("${local.tags["sgs"].Name}-%s", "xalb")
             vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
             tags                = merge( local.tags["sgs"],
                 {
-                    "Name" = lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))
+                    "Name" = format("${local.tags["sgs"].Name}-%s", "xalb")
                 }
             )
         }
@@ -60,51 +60,51 @@ module "SecurityGroupRule" {
     # rule  : {SecurityGroup_identifier}_{type}_{from_port}_{to_port}_{protocol} / split{"_",rule}
     sgrs = [
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]
             rule                        = "bestion_egress_0_0_-1_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
             description                 = "outbound ANY"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]
             rule                        = "bestion_ingress_10022_10022_tcp_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
             description                 = "SSH"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]
             rule                        = "bestion_ingress_3128_3128_tcp_wproxy"
-            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"] })
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")] })
             description                 = "SSH"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "xalb")]
             rule                        = "xalb_ingress_80_80_tcp_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
             description                 = "Web Service"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "xalb")]
             rule                        = "xalb_egress_0_0_-1_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
             description                 = "outbound ANY"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")]
             rule                        = "web_egress_0_0_-1_0.0.0.0/0"
             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
             description                 = "outbound ANY"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")]
             rule                        = "web_ingress_10022_10022_tcp_bestion"
-            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]} )
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]} )
             description                 = "from Bestion SSH"
         },
         {
-            security_group_identifier   = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]
+            security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")]
             rule                        = "web_ingress_80_80_tcp_bestion"
-            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "xalb"))}"]} )
+            rule_target                 = merge(local.sgrs_target, { source_security_group_id = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "xalb")]} )
             description                 = "from xalb Web Service"
         }
     ]

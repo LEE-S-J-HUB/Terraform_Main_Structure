@@ -3,19 +3,19 @@ locals {
     Environment             = "DEV"
     tags                    = {
         "bestion"   = {
-            "Name"  = ""
+            "Name"  = lower(format("ec2-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
         "web"   = {
-            "Name"  = ""
+            "Name"  = lower(format("ec2-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
         "ebs"   = {
-            "Name"  = ""
+            "Name"  = lower(format("ebs-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
         "eip"   = {
-            "Name"  = ""
+            "Name"  = lower(format("eip-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
     }
@@ -80,7 +80,7 @@ module "create-ec2_instance" {
     source = "../00-Module/EC2"
     ec2 = [
         {
-            identifier              = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
+            identifier              = format("${local.tags["bestion"].Name}-%s", "bestion")
             ami                     = "ami-02de72c5dc79358c9"
             instance_type           = "t2.micro"
             availability_zone       = "ap-northeast-2a"
@@ -89,7 +89,7 @@ module "create-ec2_instance" {
             user_data               = local.ec2_default_user_data
             tags                    = merge(local.tags["bestion"],
                 {
-                    "Name" = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))
+                    "Name" = format("${local.tags["bestion"].Name}-%s", "bestion")
                 }
             )
             root_block_device = [
@@ -101,7 +101,7 @@ module "create-ec2_instance" {
                     kms_key_id              = ""
                     tags = merge(local.tags["ebs"],
                         {
-                            "Name" = lower(format("ebs-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))   
+                            "Name" = format("${local.tags["ebs"].Name}-%s", "bestion") 
                         }
                     )
                 }
@@ -111,7 +111,7 @@ module "create-ec2_instance" {
             }
         },
         {
-            identifier              = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+            identifier              = format("${local.tags["web"].Name}-%s", "web")
             ami                     = "ami-02de72c5dc79358c9"
             instance_type           = "t2.micro"
             availability_zone       = "ap-northeast-2a"
@@ -120,7 +120,7 @@ module "create-ec2_instance" {
             user_data               = local.ec2_default_user_data
             tags                    = merge(local.tags["web"],
                 {
-                    "Name" = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "web"))
+                    "Name" = format("${local.tags["web"].Name}-%s", "web")
                 }
             )
             root_block_device = [
@@ -132,7 +132,7 @@ module "create-ec2_instance" {
                     kms_key_id              = ""
                     tags = merge(local.tags["ebs"],
                         {
-                            "Name" = lower(format("ebs-an2-%s-%s-%s", local.project_code, local.Environment, "web"))   
+                            "Name" = format("${local.tags["ebs"].Name}-%s", "web")  
                         }
                     )
                 }
@@ -144,11 +144,11 @@ module "create-ec2_instance" {
     ]
     eips        = [
         {
-            identifier      = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "bestion")) 
-            ec2_identifier  = lower(format("ec2-an2-%s-%s-%s", local.project_code, local.Environment, "bestion")) 
+            identifier      = format("${local.tags["eip"].Name}-%s", "bestion")
+            ec2_identifier  = format("${local.tags["bestion"].Name}-%s", "bestion") 
             tags = merge(local.tags["eip"],
                 {
-                    "Name" = lower(format("eip-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))   
+                    "Name" = format("${local.tags["eip"].Name}-%s", "bestion") 
                 }
             )
         }
