@@ -21,3 +21,7 @@
 # output "target_group_attachment" {
 #     value   = aws_lb_target_group_attachment.test
 # }
+
+# output "aws_lb" {
+#     value = module.aws_lb.
+# }

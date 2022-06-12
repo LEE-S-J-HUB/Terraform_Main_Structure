@@ -2,37 +2,25 @@ locals {
     project_code            = "tra01"
     Environment             = "DEV"
     tags                    = {
-        "TargetGroup"   = {
-            "Name"  = lower(format("tg-an2-%s-%s", local.project_code, local.Environment))
-        }
-        "vpc"   = {
-            "Name"  = lower(format("vpc-an2-%s-%s", local.project_code, local.Environment))
-        }
-        "ec2"   = {
-            "Name"  = lower(format("ec2-an2-%s-%s", local.project_code, local.Environment))
+        "alb"   = {
+            "Name"  = lower(format("alb-an2-%s-%s", local.project_code, local.Environment))
+            "ENV"   = "${local.Environment}"
         }
     }
-    vpc_ids = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
-    ec2_ids = data.terraform_remote_state.EC2.outputs.ec2_instaces_ids
+    scg_list  = data.terraform_remote_state.SecurityGroup.outputs.scg_ids
+    sub_list  = data.terraform_remote_state.VPC_Subnet.outputs.sub_ids
 }
 
-module "lb_TargetGroup" {
-    source = "../00-Module/lb_TargetGroup"
-    tgs =[
+module "aws_lb" {
+    source  = "../00-Module/LB/"
+    albs    = [
         {
-            name        = format("${local.tags["TargetGroup"].Name}-%s", "web")
-            port        = 80
-            protocol    = "HTTP"
-            target_type = "instance"
-            vpc_id      = local.vpc_ids["${format("${local.tags["vpc"].Name}-%s", "pub")}"]
-        }
-    ]
-
-    tgas = [
-        {
-            target_group_identifier = format("${local.tags["TargetGroup"].Name}-%s", "web")
-            target_id               = local.ec2_ids[format("${local.tags["ec2"].Name}-%s", "web")]
-            port                    = 80
+            name                        = format("${local.tags["alb"].Name}-%s", "web")
+            internal                    = false
+            security_groups             = [local.scg_list["scg-an2-tra01-dev-xalb"]]
+            subnets                     = [local.sub_list["sub-an2-tra01-dev-lb-01a"], local.sub_list["sub-an2-tra01-dev-lb-01c"]]
+            enable_deletion_protection  = false
+            tags = merge(local.tags["alb"], { "Name" = format("${local.tags["alb"].Name}-%s", "web") } )
         }
     ]
 }
