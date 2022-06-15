@@ -1,7 +1,8 @@
 terraform {
     required_providers {
       aws = {
-          version = "~>4.10"
+            source  = "hashicorp/aws"
+            version = "~>4.10"
       }
     }
     backend "s3" {
@@ -13,6 +14,7 @@ terraform {
 }
 
 provider "aws" {
+    alias   = "def"
     profile = "default"
     region  = "ap-northeast-2"
 }

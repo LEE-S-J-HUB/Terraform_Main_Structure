@@ -1,0 +1,2 @@
+AccountName,SecurityGroup,Type,Protocol,PortRange,Source,Description
+default,scg-an2-tra01-dev-bestion,ingress,tcp,22,0.0.0.0/0,ssh
