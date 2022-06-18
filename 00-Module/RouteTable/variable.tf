@@ -1,4 +1,4 @@
-variable "rts" {
+variable "rt" {
     type    = list(object({
         rt_identifier   = string
         vpc_id          = string
@@ -6,14 +6,14 @@ variable "rts" {
     }))
 }
 
-variable "rtas" {
+variable "rta" {
     type    = list(object({
         rt_identifier           = string
         association_subent_id   = string
     }))
 }
 
-variable "rtrs" {
+variable "rtr" {
     type    = list(object({
         route_table_identifier  = string
         destination_cidr_block  = string

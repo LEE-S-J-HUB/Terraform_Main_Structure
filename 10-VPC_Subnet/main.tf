@@ -1,33 +1,8 @@
 # 10-VPC_Subnet Description
 # Create AWS Resource List VPC, Insternet Gateway, Subnet, NAT Gateway, Elastic IP(NAT Gateway)
 
-
-# Naming Rule : {Service}-{Region}-{Project_Code}-{Environment}-{Pupose}
 locals {
-    project_code = "tra01"
-    Environment  = "DEV"
-    tags         = {
-        "vpc"   = {
-            "Name"  = lower(format("vpc-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-        "igw"   = {
-            "Name"  = lower(format("igw-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-        "sub"   = {
-            "Name"  = lower(format("sub-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-        "ngw"   = {
-            "Name"  = lower(format("ngw-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-        "eip"   = {
-            "Name"  = lower(format("eip-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-    }
+    tags    = data.terraform_remote_state.local.outputs.global_environment_tags
 }
 
 module "VPC_Subnet" {

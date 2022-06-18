@@ -87,11 +87,7 @@ module "create-ec2_instance" {
             subnet_id               = local.sub_ids["${lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "lb-01a"))}"]
             vpc_security_group_ids  = [local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "bestion"))}"]]
             user_data               = local.ec2_default_user_data
-            tags                    = merge(local.tags["bestion"],
-                {
-                    "Name" = format("${local.tags["bestion"].Name}-%s", "bestion")
-                }
-            )
+            tags                    = merge(local.tags["bestion"], { "Name" = format("${local.tags["bestion"].Name}-%s", "bestion") } )
             root_block_device = [
                 {
                     volume_type             = "gp2"
@@ -99,11 +95,7 @@ module "create-ec2_instance" {
                     delete_on_termination   = true
                     encrypted               = true
                     kms_key_id              = ""
-                    tags = merge(local.tags["ebs"],
-                        {
-                            "Name" = format("${local.tags["ebs"].Name}-%s", "bestion") 
-                        }
-                    )
+                    tags = merge(local.tags["ebs"], { "Name" = format("${local.tags["ebs"].Name}-%s", "bestion") } )
                 }
             ]
             launch_template = {
@@ -118,11 +110,7 @@ module "create-ec2_instance" {
             subnet_id               = local.sub_ids["${lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "web-01a"))}"]
             vpc_security_group_ids  = [local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]]
             user_data               = local.ec2_default_user_data
-            tags                    = merge(local.tags["web"],
-                {
-                    "Name" = format("${local.tags["web"].Name}-%s", "web")
-                }
-            )
+            tags                    = merge(local.tags["web"], { "Name" = format("${local.tags["web"].Name}-%s", "web") } )
             root_block_device = [
                 {
                     volume_type             = "gp2"
@@ -130,11 +118,7 @@ module "create-ec2_instance" {
                     delete_on_termination   = true
                     encrypted               = true
                     kms_key_id              = ""
-                    tags = merge(local.tags["ebs"],
-                        {
-                            "Name" = format("${local.tags["ebs"].Name}-%s", "web")  
-                        }
-                    )
+                    tags = merge(local.tags["ebs"], { "Name" = format("${local.tags["ebs"].Name}-%s", "web") } )
                 }
             ]
             launch_template = {

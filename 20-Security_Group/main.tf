@@ -1,48 +1,41 @@
 locals {
-    project_code = "tra01"
-    Environment  = "DEV"
-    tags         = {
-        "sgs"     = {
-            "Name"  = lower(format("scg-an2-%s-%s", local.project_code, local.Environment))
-            "ENV"   = "${local.Environment}"
-        }
-    }
     sgrs_target = {
         cidr_blocks                     = null
         ipv6_cidr_blocks                = null
         prefix_list_ids                 = null
         source_security_group_id        = null
     }
-    vpc_id       = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
+    tags        = data.terraform_remote_state.local.outputs.global_environment_tags
+    vpc_id      = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
 }
 
 module "SecurityGroup" {
     source          = "../00-Module/SecurityGroup"
-    sgs             = [
+    scg             = [
         {
-            identifier       = format("${local.tags["sgs"].Name}-%s", "bestion")
-            vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
-            tags                = merge( local.tags["sgs"],
+            identifier       = format("${local.tags["scg"].Name}-%s", "bestion")
+            vpc_id           = local.vpc_id["${format("${local.tags["vpc"].Name}-%s", "pub")}"]
+            tags                = merge( local.tags["scg"],
                 {
-                    "Name" = format("${local.tags["sgs"].Name}-%s", "bestion")
+                    "Name" = format("${local.tags["scg"].Name}-%s", "bestion")
                 }
             )
         },
         {
-            identifier       = format("${local.tags["sgs"].Name}-%s", "web")
-            vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
-            tags                = merge( local.tags["sgs"],
+            identifier       = format("${local.tags["scg"].Name}-%s", "web")
+            vpc_id           = local.vpc_id["${format("${local.tags["vpc"].Name}-%s","pub")}"]
+            tags                = merge( local.tags["scg"],
                 {
-                    "Name" = format("${local.tags["sgs"].Name}-%s", "web")
+                    "Name" = format("${local.tags["scg"].Name}-%s", "web")
                 }
             )
         },
         {
-            identifier       = format("${local.tags["sgs"].Name}-%s", "xalb")
-            vpc_id           = local.vpc_id["${lower(format("vpc-an2-%s-%s-%s", local.project_code, local.Environment, "pub"))}"]
-            tags                = merge( local.tags["sgs"],
+            identifier       = format("${local.tags["scg"].Name}-%s", "xalb")
+            vpc_id           = local.vpc_id["${format("${local.tags["vpc"].Name}-%s","pub")}"]
+            tags                = merge( local.tags["scg"],
                 {
-                    "Name" = format("${local.tags["sgs"].Name}-%s", "xalb")
+                    "Name" = format("${local.tags["scg"].Name}-%s", "xalb")
                 }
             )
         }

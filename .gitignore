@@ -4,3 +4,4 @@
 21-EC2/.terraform/providers/registry.terraform.io/hashicorp/aws/4.16.0/windows_amd64/terraform-provider-aws_v4.16.0_x5.exe
 25-LB_TargetGroup/.terraform/providers/registry.terraform.io/hashicorp/aws/4.18.0/windows_amd64/terraform-provider-aws_v4.18.0_x5.exe
 26-LoadBalancer/.terraform/providers/registry.terraform.io/hashicorp/aws/4.18.0/windows_amd64/terraform-provider-aws_v4.18.0_x5.exe
+01-local/.terraform/providers/registry.terraform.io/hashicorp/aws/4.19.0/windows_amd64/terraform-provider-aws_v4.19.0_x5.exe

@@ -1,19 +1,7 @@
 locals {
-    project_code            = "tra01"
-    Environment             = "DEV"
-    tags                    = {
-        "TargetGroup"   = {
-            "Name"  = lower(format("tg-an2-%s-%s", local.project_code, local.Environment))
-        }
-        "vpc"   = {
-            "Name"  = lower(format("vpc-an2-%s-%s", local.project_code, local.Environment))
-        }
-        "ec2"   = {
-            "Name"  = lower(format("ec2-an2-%s-%s", local.project_code, local.Environment))
-        }
-    }
-    vpc_ids         = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
-    ec2_ids         = data.terraform_remote_state.EC2.outputs.ec2_instaces_ids
+    tags        = data.terraform_remote_state.local.outputs.global_environment_tags
+    vpc_ids     = data.terraform_remote_state.VPC_Subnet.outputs.vpc_ids
+    ec2_ids     = data.terraform_remote_state.EC2.outputs.ec2_instaces_ids
 }
 
 module "lb_TargetGroup" {
@@ -23,7 +11,7 @@ module "lb_TargetGroup" {
     # key : name
     tgs     = [
         {
-            name                    = format("${local.tags["TargetGroup"].Name}-%s", "web")
+            name                    = format("${local.tags["tg"].Name}-%s", "web")
             port                    = 80
             protocol                = "HTTP"
             target_type             = "instance"
@@ -36,7 +24,7 @@ module "lb_TargetGroup" {
     # key : {target_group_identifier}_{target_id}_{port}
     tgas    = [
         {
-            target_group_identifier = format("${local.tags["TargetGroup"].Name}-%s", "web")
+            target_group_identifier = format("${local.tags["tg"].Name}-%s", "web")
             target_id               = local.ec2_ids[format("${local.tags["ec2"].Name}-%s", "web")]
             port                    = 80
         }
