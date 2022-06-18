@@ -130,11 +130,7 @@ module "create-ec2_instance" {
         {
             identifier      = format("${local.tags["eip"].Name}-%s", "bestion")
             ec2_identifier  = format("${local.tags["bestion"].Name}-%s", "bestion") 
-            tags = merge(local.tags["eip"],
-                {
-                    "Name" = format("${local.tags["eip"].Name}-%s", "bestion") 
-                }
-            )
+            tags = merge(local.tags["eip"], { "Name" = format("${local.tags["eip"].Name}-%s", "bestion") } )
         }
     ]
 }
