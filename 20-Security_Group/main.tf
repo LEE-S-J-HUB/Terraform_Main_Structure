@@ -63,12 +63,6 @@ module "SecurityGroupRule" {
 #     sgrs = [
 #         {
 #             security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]
-#             rule                        = "bestion_egress_0_0_-1_0.0.0.0/0"
-#             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
-#             description                 = "outbound ANY"
-#         },
-#         {
-#             security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "bestion")]
 #             rule                        = "bestion_ingress_10022_10022_tcp_0.0.0.0/0"
 #             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
 #             description                 = "SSH"
@@ -84,18 +78,6 @@ module "SecurityGroupRule" {
 #             rule                        = "xalb_ingress_80_80_tcp_0.0.0.0/0"
 #             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
 #             description                 = "Web Service"
-#         },
-#         {
-#             security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "xalb")]
-#             rule                        = "xalb_egress_0_0_-1_0.0.0.0/0"
-#             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
-#             description                 = "outbound ANY"
-#         },
-#         {
-#             security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")]
-#             rule                        = "web_egress_0_0_-1_0.0.0.0/0"
-#             rule_target                 = merge(local.sgrs_target, { cidr_blocks = ["0.0.0.0/0"] })
-#             description                 = "outbound ANY"
 #         },
 #         {
 #             security_group_identifier   = local.scg_ids[format("${local.tags["sgs"].Name}-%s", "web")]
