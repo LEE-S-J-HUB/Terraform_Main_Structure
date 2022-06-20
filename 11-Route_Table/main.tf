@@ -66,6 +66,13 @@ module "RouteTable" {
             target_resource         = merge(local.rtrs_target_resouce_id,
                 { gateway_id = local.igw_list["${format("${local.tags["igw"].Name}-%s", "pub")}"] }
             )
+        },
+        {
+            route_table_identifier  = format("${local.tags["rt"].Name}-%s", "web")
+            destination_cidr_block  = "0.0.0.0/0"
+            target_resource         = merge(local.rtrs_target_resouce_id,
+                { gateway_id = local.ngw_list["${format("${local.tags["ngw"].Name}-%s", "lb-01a")}"] }
+            )
         }
     ]
 }

@@ -101,29 +101,6 @@ module "create-ec2_instance" {
             launch_template = {
                 Existence = "no"
             }
-        },
-        {
-            identifier              = format("${local.tags["web"].Name}-%s", "web")
-            ami                     = "ami-02de72c5dc79358c9"
-            instance_type           = "t2.micro"
-            availability_zone       = "ap-northeast-2a"
-            subnet_id               = local.sub_ids["${lower(format("sub-an2-%s-%s-%s", local.project_code, local.Environment, "web-01a"))}"]
-            vpc_security_group_ids  = [local.scg_ids["${lower(format("scg-an2-%s-%s-%s", local.project_code, local.Environment, "web"))}"]]
-            user_data               = local.ec2_default_user_data
-            tags                    = merge(local.tags["web"], { "Name" = format("${local.tags["web"].Name}-%s", "web") } )
-            root_block_device = [
-                {
-                    volume_type             = "gp2"
-                    volume_size             = 50
-                    delete_on_termination   = true
-                    encrypted               = true
-                    kms_key_id              = ""
-                    tags = merge(local.tags["ebs"], { "Name" = format("${local.tags["ebs"].Name}-%s", "web") } )
-                }
-            ]
-            launch_template = {
-                Existence = "no"
-            }
         }
     ]
     eips        = [

@@ -6,6 +6,10 @@ locals {
             "Name"  = lower(format("alb-an2-%s-%s", local.project_code, local.Environment))
             "ENV"   = "${local.Environment}"
         }
+        "nlb"   = {
+            "Name"  = lower(format("nlb-an2-%s-%s", local.project_code, local.Environment))
+            "ENV"   = "${local.Environment}"
+        }
     }
     scg_list  = data.terraform_remote_state.SecurityGroup.outputs.scg_ids
     sub_list  = data.terraform_remote_state.VPC_Subnet.outputs.sub_ids
@@ -13,7 +17,7 @@ locals {
 
 module "aws_lb" {
     source  = "../00-Module/LB/"
-    albs    = [
+    alb = [
         {
             name                        = format("${local.tags["alb"].Name}-%s", "web")
             internal                    = false
@@ -21,6 +25,15 @@ module "aws_lb" {
             subnets                     = [local.sub_list["sub-an2-tra01-dev-lb-01a"], local.sub_list["sub-an2-tra01-dev-lb-01c"]]
             enable_deletion_protection  = false
             tags = merge(local.tags["alb"], { "Name" = format("${local.tags["alb"].Name}-%s", "web") } )
+        }
+    ]
+    nlb = [
+        {
+            name                        = format("${local.tags["nlb"].Name}-%s", "web")
+            internal                    = false
+            subnets                     = [local.sub_list["sub-an2-tra01-dev-lb-01a"], local.sub_list["sub-an2-tra01-dev-lb-01c"]]
+            enable_deletion_protection  = false
+            tags = merge(local.tags["alb"], { "Name" = format("${local.tags["nlb"].Name}-%s", "web") } )
         }
     ]
 }

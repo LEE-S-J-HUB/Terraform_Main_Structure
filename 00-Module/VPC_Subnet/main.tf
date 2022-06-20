@@ -29,7 +29,7 @@ resource "aws_eip" "this" {
 
 resource "aws_nat_gateway" "this" {
     for_each            = { for ngw in var.ngws : ngw.ngw_identifier => ngw if ngw.eip_identifier != null }
-    subnet_id           = aws_subnet.this["${each.value.subnet_identifier}"].id
+    subnet_id           = aws_subnet.this["${each.value.sub_identifier}"].id
     allocation_id       = aws_eip.this["${each.value.eip_identifier}"].id
     tags                = each.value.ngw_tags
 }
