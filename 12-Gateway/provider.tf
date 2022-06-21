@@ -6,8 +6,8 @@ terraform {
     }
     backend "s3" {
         bucket  = "s3-an2-lsj-dev-terraform"
-        key     = "tra01/11-RouteTable.tfstate"
-        region = "ap-northeast-2"
+        key     = "tra01/10-VPC_Subnet.tfstate"
+        region  = "ap-northeast-2"
         encrypt = true
         profile = "MFA"
     }

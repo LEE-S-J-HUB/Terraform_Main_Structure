@@ -12,6 +12,9 @@ locals {
     
 module "RouteTable" {
     source  = "../00-Module/RouteTable/"
+    providers = {
+        aws = aws.test
+    }
     # rts Description : Create Resource - route_table
     # rt_Key : rt_identifier ( rt_tags["Name"])
     # igw_tags["Name"] Format : {Service}-{Region}-{Project_Code}-{Environment}-{Pupose}
@@ -20,20 +23,12 @@ module "RouteTable" {
         {
             rt_identifier       = format("${local.tags["rt"].Name}-%s", "lb")
             vpc_id              = local.vpc_list["vpc-an2-tra01-dev-pub"]
-            tags                = merge( local.tags["rt"],
-                {
-                    "Name" = format("${local.tags["rt"].Name}-%s", "lb")
-                }
-            )
+            tags                = merge( local.tags["rt"], { "Name" = format("${local.tags["rt"].Name}-%s", "lb") } )
         },
         {
             rt_identifier       = format("${local.tags["rt"].Name}-%s", "web")
             vpc_id              = local.vpc_list["vpc-an2-tra01-dev-pub"]
-            tags                = merge( local.tags["rt"],
-                {
-                    "Name" = format("${local.tags["rt"].Name}-%s", "web")
-                }
-            )
+            tags                = merge( local.tags["rt"], { "Name" = format("${local.tags["rt"].Name}-%s", "web") } )
         }
     ]
     # rts Description : Create Resource - route_table_association

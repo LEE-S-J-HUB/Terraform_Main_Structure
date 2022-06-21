@@ -9,12 +9,19 @@ terraform {
         key     = "tra01/10-VPC_Subnet.tfstate"
         region  = "ap-northeast-2"
         encrypt = true
+        profile = "MFA"
     }
 }
 
 provider "aws" {
-    profile = "default"
     region  = "ap-northeast-2"
+    profile = "MFA"
+}
+
+provider "aws" {
+  alias  = "test"
+  profile = "TEST"
+  region  = "ap-northeast-2"
 }
 
 data "terraform_remote_state" "local" {
@@ -24,5 +31,6 @@ data "terraform_remote_state" "local" {
         region = "ap-northeast-2"
         key ="tra01/01-local.tfstate"
         encrypt = true
+        profile = "MFA"
     }
 }

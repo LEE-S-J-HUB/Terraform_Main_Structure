@@ -64,31 +64,31 @@ module "VPC_Subnet" {
         }
     ]
 
-    Resource creation method : for_each
-    igw Key : igw_identifier ( igw_tags["Name"])
-    igws    = [
-        {
-            vpc_identifier          = format("${local.tags["vpc"].Name}-%s", "pub")
-            igw_identifier          = format("${local.tags["igw"].Name}-%s", "pub")
-            igw_tags                = merge( local.tags["igw"], { "Name" = format("${local.tags["igw"].Name}-%s", "pub") } )
-        }
-    ]
-
     # Resource creation method : for_each
-    # ngw Key : ngw_identifier ( ngw_tags["Name"])
-    # eip Key : eip_identifier ( eip_tags["Name"])
-    ngws    = [
-        {
-            sub_identifier          = format("${local.tags["sub"].Name}-%s", "lb-01a")
-            ngw_identifier          = format("${local.tags["ngw"].Name}-%s", "lb-01a")
-            eip_identifier          = format("${local.tags["eip"].Name}-%s", "ngw")
-            ngw_tags                = merge( local.tags["ngw"], { "Name" = format("${local.tags["ngw"].Name}-%s", "lb-01a") } )
-            eip_tags                = merge( local.tags["eip"], { "Name" = format("${local.tags["eip"].Name}-%s", "ngw") } )
-            # sub_identifier          = null
-            # ngw_identifier          = null
-            # eip_identifier          = null
-            # ngw_tags                = null
-            # eip_tags                = null
-        }
-    ]
+    # igw Key : igw_identifier ( igw_tags["Name"])
+    # igws    = [
+    #     {
+    #         vpc_identifier          = format("${local.tags["vpc"].Name}-%s", "pub")
+    #         igw_identifier          = format("${local.tags["igw"].Name}-%s", "pub")
+    #         igw_tags                = merge( local.tags["igw"], { "Name" = format("${local.tags["igw"].Name}-%s", "pub") } )
+    #     }
+    # ]
+
+    # # Resource creation method : for_each
+    # # ngw Key : ngw_identifier ( ngw_tags["Name"])
+    # # eip Key : eip_identifier ( eip_tags["Name"])
+    # ngws    = [
+    #     {
+    #         sub_identifier          = format("${local.tags["sub"].Name}-%s", "lb-01a")
+    #         ngw_identifier          = format("${local.tags["ngw"].Name}-%s", "lb-01a")
+    #         eip_identifier          = format("${local.tags["eip"].Name}-%s", "ngw")
+    #         ngw_tags                = merge( local.tags["ngw"], { "Name" = format("${local.tags["ngw"].Name}-%s", "lb-01a") } )
+    #         eip_tags                = merge( local.tags["eip"], { "Name" = format("${local.tags["eip"].Name}-%s", "ngw") } )
+    #         # sub_identifier          = null
+    #         # ngw_identifier          = null
+    #         # eip_identifier          = null
+    #         # ngw_tags                = null
+    #         # eip_tags                = null
+    #     }
+    # ]
 }
